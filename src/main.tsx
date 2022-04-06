@@ -6,6 +6,7 @@ import { Provider as StyletronProvider } from 'styletron-react';
 import { LightTheme, BaseProvider } from 'baseui';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import AuthProvider from './providers/AuthProvider';
 
 if (import.meta.env.DEV) {
   import('./mocks/browser').then(({ worker }) => {
@@ -19,9 +20,11 @@ ReactDOM.render(
   <React.StrictMode>
     <StyletronProvider value={engine}>
       <BaseProvider theme={LightTheme}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <AuthProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </AuthProvider>
       </BaseProvider>
     </StyletronProvider>
   </React.StrictMode>,
