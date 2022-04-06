@@ -6,6 +6,12 @@ import { Provider as StyletronProvider } from 'styletron-react';
 import { LightTheme, BaseProvider } from 'baseui';
 import App from './App';
 
+if (import.meta.env.DEV) {
+  import('./mocks/browser').then(({ worker }) => {
+    worker.start();
+  });
+}
+
 const engine = new Styletron();
 
 ReactDOM.render(
