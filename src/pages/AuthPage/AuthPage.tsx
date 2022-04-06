@@ -39,7 +39,7 @@ const AuthPage: VFC = () => {
   };
 
   return (
-    <div className='max-w-md mx-auto px-6 py-6'>
+    <div className='max-w-xl mx-auto px-6 py-40'>
       <header>
         <HeadingLarge>Authenticate</HeadingLarge>
         <ParagraphSmall className='mt-2'>

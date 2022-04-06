@@ -97,7 +97,7 @@ const ChatPage: VFC = () => {
   };
 
   return (
-    <div className='h-full flex flex-col max-w-md mx-auto px-6 py-6'>
+    <div className='h-full flex flex-col container mx-auto px-6 py-6'>
       <header className='flex items-center justify-between mb-6'>
         <HeadingLarge>Chat page</HeadingLarge>
         <Button size='compact' onClick={logout}>Logout</Button>
