@@ -73,6 +73,8 @@ const ChatPage: VFC = () => {
   };
 
   const handleSendMessage = () => {
+    if (newMessage.length === 0) return;
+
     setMessages([...messages, {
       id: `${Math.random() * 1000000}`,
       content: newMessage,
