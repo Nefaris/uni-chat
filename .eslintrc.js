@@ -20,6 +20,7 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint'],
   rules: {
+    'react/prop-types': 'off',
     'arrow-body-style': 'off',
     'import/extensions': 'off',
     'react/react-in-jsx-scope': 'off',
