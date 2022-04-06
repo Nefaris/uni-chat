@@ -6,23 +6,24 @@ const useAuthContextController = () => {
   const [authToken, setAuthToken] = useLocalStorage(LocalStorageKeys.AUTH_TOKEN, null);
 
   const authenticate = async (username: string, password: string) => {
-    const res = await fetch('https://uni-chat-backend.herokuapp.com/api/auth/token/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username,
-        code: password,
-      }),
-    });
-
-    if (!res.ok) {
-      throw new Error('Authentication failed');
-    }
-
-    const data = await res.json();
-    setAuthToken(data.access_token);
+    setAuthToken('authToken' as any);
+    // const res = await fetch('https://uni-chat-backend.herokuapp.com/api/auth/token/', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     username,
+    //     code: password,
+    //   }),
+    // });
+    //
+    // if (!res.ok) {
+    //   throw new Error('Authentication failed');
+    // }
+    //
+    // const data = await res.json();
+    // setAuthToken(data.access_token);
   };
 
   const logout = () => {

@@ -30,6 +30,7 @@ const AuthPage: VFC = () => {
 
   const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUsernameValue(e.target.value);
+    setIsPasswordInvalid(false);
   };
 
   const handlePasswordChange = (values: string[]) => {
