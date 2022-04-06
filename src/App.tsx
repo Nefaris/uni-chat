@@ -11,7 +11,7 @@ const App = () => {
       <Routes>
         <Route path='/auth/*' element={!isAuthenticated ? <AuthPage /> : <Navigate to='/chat' />} />
         <Route path='/chat' element={isAuthenticated ? <ChatPage /> : <Navigate to='/auth' />} />
-        <Route path='/' element={<Navigate to='/auth' />} />
+        <Route path='*' element={<Navigate to='/auth' />} />
       </Routes>
     </div>
   );
