@@ -7,7 +7,7 @@ const App = () => {
   const { isAuthenticated } = useAuth();
 
   return (
-    <div className="fixed inset-0 w-full h-full">
+    <div className="bg-black fixed inset-0 w-full h-full">
       <Routes>
         <Route path='/auth/*' element={!isAuthenticated ? <AuthPage /> : <Navigate to='/chat' />} />
         <Route path='/chat' element={isAuthenticated ? <ChatPage /> : <Navigate to='/auth' />} />
