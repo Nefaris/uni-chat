@@ -3,7 +3,6 @@ import { Input } from 'baseui/input';
 import { PinCode } from 'baseui/pin-code';
 import { Button } from 'baseui/button';
 import { HeadingLarge, LabelSmall, ParagraphSmall } from 'baseui/typography';
-import * as React from 'react';
 import { useAuth } from '../../providers/AuthProvider';
 
 const AuthPage: VFC = () => {

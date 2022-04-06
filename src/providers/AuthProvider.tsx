@@ -1,7 +1,9 @@
-import { createContext, FC, useContext, useState } from 'react';
+import { createContext, FC, useContext } from 'react';
+import { useLocalStorage } from 'react-use';
+import { LocalStorageKeys } from '../enums/local-storage-keys';
 
 const useAuthContextController = () => {
-  const [authToken, setAuthToken] = useState<string | null>(null);
+  const [authToken, setAuthToken] = useLocalStorage(LocalStorageKeys.AUTH_TOKEN, null);
 
   const authenticate = async (username: string, password: string) => {
     const res = await fetch('/authenticate', {
@@ -23,9 +25,15 @@ const useAuthContextController = () => {
     setAuthToken(token);
   };
 
+  const logout = () => {
+    setAuthToken(null);
+  };
+
   return {
     authenticate,
+    logout,
     authToken,
+    isAuthenticated: authToken !== null,
   };
 };
 
