@@ -95,11 +95,11 @@ const ChatPage: VFC = () => {
   };
 
   return (
-    <div className='h-full flex flex-col max-w-md mx-auto px-6 pt-12 pb-6'>
-      <div className='flex items-center justify-between mb-6'>
+    <div className='h-full flex flex-col max-w-md mx-auto px-6 py-6'>
+      <header className='flex items-center justify-between mb-6'>
         <HeadingLarge>Chat page</HeadingLarge>
         <Button size='compact' onClick={logout}>Logout</Button>
-      </div>
+      </header>
 
       <div ref={scrollAnchor} className='grid gap-2 pb-6 overflow-auto'>
         {groupMessages(messages)
@@ -121,6 +121,7 @@ const ChatPage: VFC = () => {
           type='button'
           aria-label='Send'
           disabled={newMessage.length === 0}
+          onClick={handleSendMessage}
           className={classNames('absolute transform -translate-y-1/2 top-1/2 right-3 transition-opacity', newMessage.length === 0 && 'opacity-0 cursor-not-allowed')}
         >
           <IoMdSend size={24} />

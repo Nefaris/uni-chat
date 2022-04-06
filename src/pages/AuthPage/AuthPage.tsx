@@ -39,14 +39,16 @@ const AuthPage: VFC = () => {
   };
 
   return (
-    <div className='max-w-md mx-auto px-6 py-12'>
-      <HeadingLarge>Authenticate</HeadingLarge>
-      <ParagraphSmall className='mt-2'>
-        If you already have an account, enter your username and pin, if you don&apos;t have an
-        account, follow the same steps and your account will be created!
-      </ParagraphSmall>
+    <div className='max-w-md mx-auto px-6 py-6'>
+      <header>
+        <HeadingLarge>Authenticate</HeadingLarge>
+        <ParagraphSmall className='mt-2'>
+          If you already have an account, enter your username and pin, if you don&apos;t have an
+          account, follow the same steps and your account will be created!
+        </ParagraphSmall>
+      </header>
 
-      <div className='flex flex-col mt-12'>
+      <main className='flex flex-col mt-12'>
         <LabelSmall className='mb-2'>Enter your username</LabelSmall>
         <Input
           disabled={isAuthPending}
@@ -76,7 +78,7 @@ const AuthPage: VFC = () => {
             Auth
           </Button>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
