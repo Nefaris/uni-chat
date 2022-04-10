@@ -1,6 +1,5 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState, VFC } from 'react';
 import { HeadingLarge } from 'baseui/typography';
-import * as Ably from 'ably';
 import { Textarea } from 'baseui/textarea';
 import { IoMdSend } from 'react-icons/io';
 import classNames from 'classnames';
@@ -8,6 +7,8 @@ import { Button } from 'baseui/button';
 import { Message } from '../../interfaces/message.interface';
 import MessagesGroup, { MessagesGroupProps } from '../../components/MessagesGroup/MessagesGroup';
 import { useAuth } from '../../providers/AuthProvider';
+import { useOldMessages } from '../../hooks/useOldMessages';
+import { useCurrentMessages } from '../../hooks/useCurrentMessages';
 
 const groupMessages = (messageList: Message[]): MessagesGroupProps[] => {
   const groups: MessagesGroupProps[] = [];
@@ -35,46 +36,21 @@ const groupMessages = (messageList: Message[]): MessagesGroupProps[] => {
 };
 
 const ChatPage: VFC = () => {
+  const { logout } = useAuth();
   const scrollAnchor = useRef<HTMLDivElement | null>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [newMessage, setNewMessage] = useState('');
-  const {
-    logout,
-    authToken,
-  } = useAuth();
 
-  useEffect(() => {
-    scrollAnchor.current?.scrollTo({ top: scrollAnchor.current?.scrollHeight });
-  }, []);
+  const oldMessages = useOldMessages();
+  const currentMessages = useCurrentMessages();
+  const [newMessage, setNewMessage] = useState<string>('');
+
+  const messages = [...oldMessages.messages, ...currentMessages.messages];
 
   useEffect(() => {
     scrollAnchor.current?.scrollTo({
       behavior: 'smooth',
       top: scrollAnchor.current?.scrollHeight,
     });
-  }, [messages]);
-
-  useEffect(() => {
-    const client = new Ably.Realtime({ key: 'FWcRgw.v6LxNQ:euekVnxMMrDmhBvSEzZrJBz9lE9zJWbqUippj7qUcno' });
-    const channel = client.channels.get('main_chat');
-    channel.subscribe((msg: Ably.Types.Message) => {
-      const receivedMessage: Message = {
-        id: msg.data.uuid,
-        content: msg.data.content,
-        timestamp: msg.data.created_at,
-        user: {
-          id: msg.data.user.id,
-          username: msg.data.user.username,
-        },
-      };
-
-      setMessages(prevState => [...prevState, receivedMessage]);
-    });
-
-    return () => {
-      client.close();
-    };
-  }, []);
+  }, [messages.length]);
 
   const handleNewMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setNewMessage(e.target.value);
@@ -82,18 +58,7 @@ const ChatPage: VFC = () => {
 
   const handleSendMessage = async () => {
     if (newMessage.length === 0) return;
-
-    await fetch('https://uni-chat-backend.herokuapp.com/api/chat/message/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`,
-      },
-      body: JSON.stringify({
-        content: newMessage,
-      }),
-    });
-
+    await currentMessages.sendMessage(newMessage);
     setNewMessage('');
   };
 
