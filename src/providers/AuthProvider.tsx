@@ -1,11 +1,11 @@
 import { createContext, FC, useContext } from 'react';
-import { useLocalStorage } from 'react-use';
+import { useLocalStorageValue } from '@react-hookz/web';
 import { CurrentUser } from '../interfaces/current-user.interface';
 import { LocalStorageKeys } from '../enums/local-storage-keys';
 
 const useAuthContextController = () => {
-  const [authToken, setAuthToken] = useLocalStorage<string | null>(LocalStorageKeys.AUTH_TOKEN, null);
-  const [currentUser, setCurrentUser] = useLocalStorage<CurrentUser | null>(LocalStorageKeys.CURRENT_USER, null);
+  const [authToken, setAuthToken] = useLocalStorageValue<string | null>(LocalStorageKeys.AUTH_TOKEN, null);
+  const [currentUser, setCurrentUser] = useLocalStorageValue<CurrentUser | null>(LocalStorageKeys.CURRENT_USER, null);
 
   const authenticate = async (username: string, password: string) => {
     const res = await fetch('https://uni-chat-backend.herokuapp.com/api/auth/token/', {
