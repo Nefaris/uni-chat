@@ -30,7 +30,7 @@ export const useOldMessages = () => {
           },
         }));
 
-        setMessages(oldMessages.reverse());
+        setMessages(oldMessages);
       } finally {
         setIsFetching(false);
       }

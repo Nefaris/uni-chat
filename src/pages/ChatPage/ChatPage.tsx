@@ -45,7 +45,7 @@ const ChatPage: VFC = () => {
     },
   });
 
-  const messages = [...oldMessages.messages, ...currentMessages.messages];
+  const messages = [...oldMessages.messages, ...currentMessages.messages].sort((a, b) => a.timestamp - b.timestamp);
 
   useEffect(() => {
     scrollAnchor.current?.scrollTo({
