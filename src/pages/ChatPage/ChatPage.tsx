@@ -1,6 +1,6 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState, VFC } from 'react';
 import { HeadingLarge } from 'baseui/typography';
-import dayjs from 'dayjs';
+import * as Ably from 'ably';
 import { Textarea } from 'baseui/textarea';
 import { IoMdSend } from 'react-icons/io';
 import classNames from 'classnames';
@@ -35,10 +35,13 @@ const groupMessages = (messageList: Message[]): MessagesGroupProps[] => {
 };
 
 const ChatPage: VFC = () => {
-  const { logout } = useAuth();
   const scrollAnchor = useRef<HTMLDivElement | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
+  const {
+    logout,
+    authToken,
+  } = useAuth();
 
   useEffect(() => {
     scrollAnchor.current?.scrollTo({ top: scrollAnchor.current?.scrollHeight });
@@ -49,42 +52,47 @@ const ChatPage: VFC = () => {
       behavior: 'smooth',
       top: scrollAnchor.current?.scrollHeight,
     });
-
-    (async () => {
-      if (messages.length > 0 && messages[messages.length - 1].user.id === '1') {
-        const res = await fetch('https://api.chucknorris.io/jokes/random');
-        const data = await res.json();
-        setMessages([...messages, {
-          id: `${Math.random() * 1000000}`,
-          content: data.value,
-          timestamp: dayjs()
-            .valueOf(),
-          user: {
-            id: '2',
-            username: 'Bot',
-          },
-        }]);
-      }
-    })();
   }, [messages]);
+
+  useEffect(() => {
+    const client = new Ably.Realtime({ key: 'FWcRgw.v6LxNQ:euekVnxMMrDmhBvSEzZrJBz9lE9zJWbqUippj7qUcno' });
+    const channel = client.channels.get('main_chat');
+    channel.subscribe((msg: Ably.Types.Message) => {
+      const receivedMessage: Message = {
+        id: msg.data.uuid,
+        content: msg.data.content,
+        timestamp: msg.data.created_at,
+        user: {
+          id: msg.data.user.id,
+          username: msg.data.user.username,
+        },
+      };
+
+      setMessages(prevState => [...prevState, receivedMessage]);
+    });
+
+    return () => {
+      client.close();
+    };
+  }, []);
 
   const handleNewMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setNewMessage(e.target.value);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (newMessage.length === 0) return;
 
-    setMessages([...messages, {
-      id: `${Math.random() * 1000000}`,
-      content: newMessage,
-      timestamp: dayjs()
-        .valueOf(),
-      user: {
-        id: '1',
-        username: 'Kozak',
+    await fetch('https://uni-chat-backend.herokuapp.com/api/chat/message/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
       },
-    }]);
+      body: JSON.stringify({
+        content: newMessage,
+      }),
+    });
 
     setNewMessage('');
   };
@@ -103,11 +111,13 @@ const ChatPage: VFC = () => {
         <Button size='compact' onClick={logout}>Logout</Button>
       </header>
 
-      <div ref={scrollAnchor} className='grid gap-2 pb-6 overflow-auto'>
-        {groupMessages(messages)
-          .map((group) => (
-            <MessagesGroup key={group.messages[0].id} messages={group.messages} />
-          ))}
+      <div ref={scrollAnchor} className='overflow-auto'>
+        <div className='grid gap-2 pb-6 '>
+          {groupMessages(messages)
+            .map((group) => (
+              <MessagesGroup key={group.messages[0].id} messages={group.messages} />
+            ))}
+        </div>
       </div>
 
       <div className='relative mt-auto'>

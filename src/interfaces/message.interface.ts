@@ -3,7 +3,7 @@ export interface Message {
   content: string;
   timestamp: number;
   user: {
-    id: string;
+    id: number;
     username: string;
   };
 }
