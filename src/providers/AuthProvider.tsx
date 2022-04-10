@@ -4,8 +4,8 @@ import { CurrentUser } from '../interfaces/current-user.interface';
 import { LocalStorageKeys } from '../enums/local-storage-keys';
 
 const useAuthContextController = () => {
-  const [authToken, setAuthToken] = useLocalStorageValue<string | null>(LocalStorageKeys.AUTH_TOKEN, null);
-  const [currentUser, setCurrentUser] = useLocalStorageValue<CurrentUser | null>(LocalStorageKeys.CURRENT_USER, null);
+  const [authToken, setAuthToken, removeAuthToken] = useLocalStorageValue<string | null>(LocalStorageKeys.AUTH_TOKEN, null);
+  const [currentUser, setCurrentUser, removeCurrentUser] = useLocalStorageValue<CurrentUser | null>(LocalStorageKeys.CURRENT_USER, null);
 
   const authenticate = async (username: string, password: string) => {
     const res = await fetch('https://uni-chat-backend.herokuapp.com/api/auth/token/', {
@@ -33,7 +33,8 @@ const useAuthContextController = () => {
   };
 
   const logout = () => {
-    setAuthToken(null);
+    removeAuthToken();
+    removeCurrentUser();
   };
 
   return {
@@ -41,7 +42,7 @@ const useAuthContextController = () => {
     logout,
     authToken,
     currentUser,
-    isAuthenticated: authToken !== null,
+    isAuthenticated: authToken !== null && currentUser !== null,
   };
 };
 
