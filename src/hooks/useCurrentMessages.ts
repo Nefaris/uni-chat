@@ -3,7 +3,11 @@ import * as Ably from 'ably';
 import { Message } from '../interfaces/message.interface';
 import { useAuth } from '../providers/AuthProvider';
 
-export const useCurrentMessages = () => {
+interface Options {
+  onSendSuccess?: () => void;
+}
+
+export const useCurrentMessages = (options?: Options) => {
   const { authToken } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -40,6 +44,8 @@ export const useCurrentMessages = () => {
         content: message,
       }),
     });
+
+    options?.onSendSuccess?.();
   };
 
   return {

@@ -5,21 +5,21 @@ import { IoMdSend } from 'react-icons/io';
 
 export interface NewMessageInputProps {
   value: string;
-  onSubmit: (message: string) => void;
+  onChange: (value: string) => void;
+  onSubmit: (value: string) => void;
 }
 
 const NewMessageInput: VFC<NewMessageInputProps> = ({
   value,
   onSubmit,
+  onChange,
 }) => {
-  const [innerValue, setInnerValue] = useState<string>(value);
-
   const handleNewMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setInnerValue(e.target.value);
+    onChange(e.target.value);
   };
 
   const handleNewMessageSubmit = () => {
-    onSubmit(innerValue);
+    onSubmit(value);
   };
 
   const handleMessageKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -34,7 +34,7 @@ const NewMessageInput: VFC<NewMessageInputProps> = ({
       <Textarea
         rows={1}
         placeholder='Type here'
-        value={innerValue}
+        value={value}
         onChange={handleNewMessageChange}
         onKeyPress={handleMessageKeyDown}
         overrides={{ InputContainer: { style: { paddingRight: '48px' } } }}
@@ -42,9 +42,9 @@ const NewMessageInput: VFC<NewMessageInputProps> = ({
       <button
         type='button'
         aria-label='Send'
-        disabled={innerValue.length === 0}
+        disabled={value.length === 0}
         onClick={handleNewMessageSubmit}
-        className={classNames('absolute transform -translate-y-1/2 top-1/2 right-3 transition-opacity', innerValue.length === 0 && 'opacity-0 cursor-not-allowed')}
+        className={classNames('absolute transform -translate-y-1/2 top-1/2 right-3 transition-opacity', value.length === 0 && 'opacity-0 cursor-not-allowed')}
       >
         <IoMdSend size={24} />
       </button>

@@ -1,8 +1,5 @@
-import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState, VFC } from 'react';
+import { useEffect, useRef, useState, VFC } from 'react';
 import { HeadingLarge } from 'baseui/typography';
-import { Textarea } from 'baseui/textarea';
-import { IoMdSend } from 'react-icons/io';
-import classNames from 'classnames';
 import { Button } from 'baseui/button';
 import { Message } from '../../interfaces/message.interface';
 import MessagesGroup, { MessagesGroupProps } from '../../components/MessagesGroup/MessagesGroup';
@@ -39,10 +36,14 @@ const groupMessages = (messageList: Message[]): MessagesGroupProps[] => {
 const ChatPage: VFC = () => {
   const { logout } = useAuth();
   const scrollAnchor = useRef<HTMLDivElement | null>(null);
+  const [newMessage, setNewMessage] = useState<string>('');
 
   const oldMessages = useOldMessages();
-  const currentMessages = useCurrentMessages();
-  const [newMessage, setNewMessage] = useState<string>('');
+  const currentMessages = useCurrentMessages({
+    onSendSuccess: () => {
+      setNewMessage('');
+    },
+  });
 
   const messages = [...oldMessages.messages, ...currentMessages.messages];
 
@@ -56,6 +57,10 @@ const ChatPage: VFC = () => {
   const handleNewMessageSubmit = async (message: string) => {
     await currentMessages.sendMessage(message);
     setNewMessage('');
+  };
+
+  const handleNewMessageChange = (message: string) => {
+    setNewMessage(message);
   };
 
   return (
@@ -75,7 +80,11 @@ const ChatPage: VFC = () => {
       </div>
 
       <div className='mt-auto'>
-        <NewMessageInput value={newMessage} onSubmit={handleNewMessageSubmit} />
+        <NewMessageInput
+          value={newMessage}
+          onChange={handleNewMessageChange}
+          onSubmit={handleNewMessageSubmit}
+        />
       </div>
     </div>
   );
