@@ -9,6 +9,7 @@ import MessagesGroup, { MessagesGroupProps } from '../../components/MessagesGrou
 import { useAuth } from '../../providers/AuthProvider';
 import { useOldMessages } from '../../hooks/useOldMessages';
 import { useCurrentMessages } from '../../hooks/useCurrentMessages';
+import NewMessageInput from '../../components/NewMessageInput/NewMessageInput';
 
 const groupMessages = (messageList: Message[]): MessagesGroupProps[] => {
   const groups: MessagesGroupProps[] = [];
@@ -52,21 +53,9 @@ const ChatPage: VFC = () => {
     });
   }, [messages.length]);
 
-  const handleNewMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setNewMessage(e.target.value);
-  };
-
-  const handleSendMessage = async () => {
-    if (newMessage.length === 0) return;
-    await currentMessages.sendMessage(newMessage);
+  const handleNewMessageSubmit = async (message: string) => {
+    await currentMessages.sendMessage(message);
     setNewMessage('');
-  };
-
-  const handleMessageKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleSendMessage();
-    }
   };
 
   return (
@@ -79,30 +68,14 @@ const ChatPage: VFC = () => {
       <div ref={scrollAnchor} className='overflow-auto'>
         <div className='grid gap-2 pb-6 '>
           {groupMessages(messages)
-            .map((group) => (
+            .map((group: MessagesGroupProps) => (
               <MessagesGroup key={group.messages[0].id} messages={group.messages} />
             ))}
         </div>
       </div>
 
-      <div className='relative mt-auto'>
-        <Textarea
-          rows={1}
-          placeholder='Type here'
-          value={newMessage}
-          onChange={handleNewMessageChange}
-          onKeyPress={handleMessageKeyDown}
-          overrides={{ InputContainer: { style: { paddingRight: '48px' } } }}
-        />
-        <button
-          type='button'
-          aria-label='Send'
-          disabled={newMessage.length === 0}
-          onClick={handleSendMessage}
-          className={classNames('absolute transform -translate-y-1/2 top-1/2 right-3 transition-opacity', newMessage.length === 0 && 'opacity-0 cursor-not-allowed')}
-        >
-          <IoMdSend size={24} />
-        </button>
+      <div className='mt-auto'>
+        <NewMessageInput value={newMessage} onSubmit={handleNewMessageSubmit} />
       </div>
     </div>
   );

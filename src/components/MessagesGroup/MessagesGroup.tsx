@@ -2,7 +2,7 @@ import { VFC } from 'react';
 import classNames from 'classnames';
 import { motion } from 'framer-motion';
 import { Message } from '../../interfaces/message.interface';
-import MessageBubble from '../Message/MessageBubble';
+import MessageBubble from '../MessageBubble/MessageBubble';
 import { useAuth } from '../../providers/AuthProvider';
 
 export interface MessagesGroupProps {
