@@ -95,18 +95,18 @@ const SettingsPage: VFC = () => {
         </ModalBody>
         <ModalFooter>
           <ModalButton
-            disabled={isDeleteAccountPending}
-            isLoading={isDeleteAccountPending}
-            onClick={handleDeleteAccount}
             kind="secondary"
-          >
-            Confirm
-          </ModalButton>
-          <ModalButton
             disabled={isDeleteAccountPending}
             onClick={handleCloseDeleteAccountModal}
           >
             Cancel
+          </ModalButton>
+          <ModalButton
+            disabled={isDeleteAccountPending}
+            isLoading={isDeleteAccountPending}
+            onClick={handleDeleteAccount}
+          >
+            Confirm
           </ModalButton>
         </ModalFooter>
       </Modal>
