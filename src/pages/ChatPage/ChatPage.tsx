@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState, VFC } from 'react';
+import {
+  useEffect, useRef, useState, VFC,
+} from 'react';
 import { HeadingLarge } from 'baseui/typography';
 import { Button } from 'baseui/button';
+import { Link } from 'react-router-dom';
 import { Message } from '../../interfaces/message.interface';
 import MessagesGroup, { MessagesGroupProps } from '../../components/MessagesGroup/MessagesGroup';
-import { useAuth } from '../../providers/AuthProvider';
 import { useOldMessages } from '../../hooks/useOldMessages';
 import { useCurrentMessages } from '../../hooks/useCurrentMessages';
 import NewMessageInput from '../../components/NewMessageInput/NewMessageInput';
@@ -34,7 +36,6 @@ const groupMessages = (messageList: Message[]): MessagesGroupProps[] => {
 };
 
 const ChatPage: VFC = () => {
-  const { logout } = useAuth();
   const scrollAnchor = useRef<HTMLDivElement | null>(null);
   const [newMessage, setNewMessage] = useState<string>('');
 
@@ -64,14 +65,16 @@ const ChatPage: VFC = () => {
   };
 
   return (
-    <div className='h-full flex flex-col container mx-auto px-6 py-6'>
-      <header className='flex items-center justify-between mb-6'>
-        <HeadingLarge>Chat page</HeadingLarge>
-        <Button size='compact' onClick={logout}>Logout</Button>
+    <div className="h-full flex flex-col container mx-auto px-6 py-6">
+      <header className="flex items-center justify-between mb-6">
+        <HeadingLarge>Chat</HeadingLarge>
+        <Link to="/settings">
+          <Button size="compact">Settings</Button>
+        </Link>
       </header>
 
-      <div ref={scrollAnchor} className='overflow-auto'>
-        <div className='grid gap-2 pb-6 '>
+      <div ref={scrollAnchor} className="overflow-auto">
+        <div className="grid gap-2 pb-6 ">
           {groupMessages(messages)
             .map((group: MessagesGroupProps) => (
               <MessagesGroup key={group.messages[0].id} messages={group.messages} />
@@ -79,7 +82,7 @@ const ChatPage: VFC = () => {
         </div>
       </div>
 
-      <div className='mt-auto'>
+      <div className="mt-auto">
         <NewMessageInput
           value={newMessage}
           onChange={handleNewMessageChange}

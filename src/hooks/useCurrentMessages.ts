@@ -25,7 +25,7 @@ export const useCurrentMessages = (options?: Options) => {
         },
       };
 
-      setMessages(prevState => [...prevState, receivedMessage]);
+      setMessages((prevState) => [...prevState, receivedMessage]);
     });
 
     return () => {
@@ -38,7 +38,7 @@ export const useCurrentMessages = (options?: Options) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`,
+        Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
         content: message,

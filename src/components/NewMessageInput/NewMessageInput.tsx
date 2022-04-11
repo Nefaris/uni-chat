@@ -1,4 +1,6 @@
-import { ChangeEvent, KeyboardEvent, useState, VFC } from 'react';
+import {
+  ChangeEvent, KeyboardEvent, useState, VFC,
+} from 'react';
 import { Textarea } from 'baseui/textarea';
 import classNames from 'classnames';
 import { IoMdSend } from 'react-icons/io';
@@ -30,18 +32,18 @@ const NewMessageInput: VFC<NewMessageInputProps> = ({
   };
 
   return (
-    <div className='relative'>
+    <div className="relative">
       <Textarea
         rows={1}
-        placeholder='Type here'
+        placeholder="Type here"
         value={value}
         onChange={handleNewMessageChange}
         onKeyPress={handleMessageKeyDown}
         overrides={{ InputContainer: { style: { paddingRight: '48px' } } }}
       />
       <button
-        type='button'
-        aria-label='Send'
+        type="button"
+        aria-label="Send"
         disabled={value.length === 0}
         onClick={handleNewMessageSubmit}
         className={classNames('absolute transform -translate-y-1/2 top-1/2 right-3 transition-opacity', value.length === 0 && 'opacity-0 cursor-not-allowed')}

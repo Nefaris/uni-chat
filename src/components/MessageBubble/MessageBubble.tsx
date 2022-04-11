@@ -35,7 +35,7 @@ const MessageBubble: VFC<MessageProps> = ({
 }) => {
   return (
     <div className={getClassNames(isMine, isFirst, isMiddle, isLast, isAlone)}>
-      <ParagraphSmall className='break-words'>{message.content}</ParagraphSmall>
+      <ParagraphSmall className="break-words">{message.content}</ParagraphSmall>
     </div>
   );
 };

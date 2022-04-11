@@ -14,7 +14,7 @@ const MessagesGroup: VFC<MessagesGroupProps> = ({ messages }) => {
   const isMine = messages.length > 0 && messages[0].user.id === currentUser?.userId;
 
   return (
-    <div className='grid gap-1 overflow-hidden'>
+    <div className="grid gap-1 overflow-hidden">
       {messages.length > 0 && (
         <p
           className={classNames('text-xs mb-0.5 mx-3', isMine ? 'place-self-end' : 'place-self-start')}

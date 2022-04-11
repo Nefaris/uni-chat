@@ -12,7 +12,7 @@ const AuthPage: VFC = () => {
   const [isAuthPending, setIsAuthPending] = useState(false);
   const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
 
-  const isFormValid = usernameValue.length > 0 && passwordValue.filter(val => val !== '').length === 4;
+  const isFormValid = usernameValue.length > 0 && passwordValue.filter((val) => val !== '').length === 4;
 
   const handleAuthSubmit = async () => {
     if (!isFormValid || isAuthPending) return;
@@ -39,26 +39,26 @@ const AuthPage: VFC = () => {
   };
 
   return (
-    <div className='max-w-xl mx-auto px-6 py-40'>
+    <div className="max-w-xl mx-auto px-6 py-40">
       <header>
         <HeadingLarge>Authenticate</HeadingLarge>
-        <ParagraphSmall className='mt-2'>
+        <ParagraphSmall className="mt-2">
           If you already have an account, enter your username and pin, if you don&apos;t have an
           account, follow the same steps and your account will be created!
         </ParagraphSmall>
       </header>
 
-      <main className='flex flex-col mt-12'>
-        <LabelSmall className='mb-2'>Enter your username</LabelSmall>
+      <main className="flex flex-col mt-12">
+        <LabelSmall className="mb-2">Enter your username</LabelSmall>
         <Input
           disabled={isAuthPending}
           value={usernameValue}
           onChange={handleUsernameChange}
-          placeholder='Username'
+          placeholder="Username"
         />
 
-        <div className='mt-6'>
-          <LabelSmall className='mb-2'>Enter your pin code</LabelSmall>
+        <div className="mt-6">
+          <LabelSmall className="mb-2">Enter your pin code</LabelSmall>
           <PinCode
             error={isPasswordInvalid}
             disabled={usernameValue.length === 0 || isAuthPending}
@@ -69,7 +69,7 @@ const AuthPage: VFC = () => {
           />
         </div>
 
-        <div className='flex flex-col mt-6'>
+        <div className="flex flex-col mt-6">
           <Button
             isLoading={isAuthPending}
             disabled={!isFormValid || isAuthPending}

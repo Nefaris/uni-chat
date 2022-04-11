@@ -15,7 +15,7 @@ export const useOldMessages = () => {
         const res = await fetch(`https://uni-chat-backend.herokuapp.com/api/chat/message?offset=${paginationOffset}&limit=1000000`, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`,
+            Authorization: `Bearer ${authToken}`,
           },
         });
 
@@ -40,7 +40,7 @@ export const useOldMessages = () => {
   }, [paginationOffset, authToken]);
 
   const fetchMore = (addOffset: number) => {
-    setPaginationOffset(prevState => prevState + 20 + addOffset);
+    setPaginationOffset((prevState) => prevState + 20 + addOffset);
   };
 
   return {

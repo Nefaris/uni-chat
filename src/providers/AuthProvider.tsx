@@ -37,8 +37,30 @@ const useAuthContextController = () => {
     removeCurrentUser();
   };
 
+  const deleteAccount = async () => {
+    const res = await fetch('https://uni-chat-backend.herokuapp.com/api/users/me/', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error('Authentication failed');
+    }
+
+    removeAuthToken();
+    removeCurrentUser();
+  };
+
+  const changePinCode = async () => {
+  };
+
   return {
     authenticate,
+    deleteAccount,
+    changePinCode,
     logout,
     authToken,
     currentUser,
