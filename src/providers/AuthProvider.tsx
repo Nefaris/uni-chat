@@ -54,7 +54,21 @@ const useAuthContextController = () => {
     removeCurrentUser();
   };
 
-  const changePinCode = async () => {
+  const changePinCode = async (newPinCode: string) => {
+    const res = await fetch('https://uni-chat-backend.herokuapp.com/api/users/me/', {
+      method: 'PATCH',
+      body: JSON.stringify({
+        code: newPinCode,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error('Authentication failed');
+    }
   };
 
   return {

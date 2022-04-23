@@ -10,12 +10,17 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../providers/AuthProvider';
 
 const SettingsPage: VFC = () => {
-  const { deleteAccount } = useAuth();
+  const {
+    deleteAccount,
+    changePinCode,
+  } = useAuth();
+
   const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false);
   const [isDeleteAccountPending, setIsDeleteAccountPending] = useState(false);
 
   const [isChangePinCodeModalOpen, setIsChangePinCodeModalOpen] = useState(false);
   const [newPinCode, setNewPinCode] = useState(['', '', '', '']);
+  const [isChangePinCodePending, setIsChangePinCodePending] = useState(false);
 
   const handleDeleteAccount = async () => {
     if (isDeleteAccountPending) return;
@@ -29,6 +34,16 @@ const SettingsPage: VFC = () => {
   };
 
   const handleChangePinCode = async () => {
+    setIsChangePinCodePending(true);
+
+    try {
+      await changePinCode(newPinCode.join(''));
+      setIsChangePinCodePending(false);
+      setIsChangePinCodeModalOpen(false);
+      setNewPinCode(['', '', '', '']);
+    } finally {
+      setIsChangePinCodePending(false);
+    }
   };
 
   const handleCloseDeleteAccountModal = () => {
@@ -84,13 +99,11 @@ const SettingsPage: VFC = () => {
         animate
         autoFocus
       >
-
         <ModalHeader>Delete account</ModalHeader>
         <ModalBody>
           <p>
-            Proin ut dui sed metus pharetra hend rerit vel non
-            mi. Nulla ornare faucibus ex, non facilisis nisl.
-            Maecenas aliquet mauris ut tempus.
+            Proin ut dui sed metus pharetra hend rerit vel non mi. Nulla ornare faucibus ex, non
+            facilisis nisl. Maecenas aliquet mauris ut tempus.
           </p>
         </ModalBody>
         <ModalFooter>
@@ -113,7 +126,7 @@ const SettingsPage: VFC = () => {
 
       <Modal
         onClose={handleCloseChangePinCodeModal}
-        closeable
+        closeable={!isChangePinCodePending}
         isOpen={isChangePinCodeModalOpen}
         animate
         autoFocus
@@ -121,26 +134,29 @@ const SettingsPage: VFC = () => {
         <ModalHeader>Change pin code</ModalHeader>
         <ModalBody>
           <p className="mb-4">
-            Proin ut dui sed metus pharetra hend rerit vel non
-            mi. Nulla ornare faucibus ex, non facilisis nisl.
-            Maecenas aliquet mauris ut tempus.
+            Proin ut dui sed metus pharetra hend rerit vel non mi. Nulla ornare faucibus ex, non
+            facilisis nisl. Maecenas aliquet mauris ut tempus.
           </p>
 
           <PinCode
             mask
             values={newPinCode}
+            disabled={isChangePinCodePending}
             onChange={({ values }) => setNewPinCode(values)}
             clearOnEscape
           />
         </ModalBody>
         <ModalFooter>
           <ModalButton
+            disabled={isChangePinCodePending}
             onClick={handleCloseChangePinCodeModal}
             kind="secondary"
           >
             Cancel
           </ModalButton>
-          <ModalButton onClick={handleChangePinCode}>Confirm</ModalButton>
+          <ModalButton disabled={isChangePinCodePending} onClick={handleChangePinCode}>
+            Confirm
+          </ModalButton>
         </ModalFooter>
       </Modal>
     </>
